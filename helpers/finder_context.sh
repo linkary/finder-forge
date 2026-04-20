@@ -4,7 +4,7 @@ set -euo pipefail
 
 show_alert() {
   local message="${1}"
-  local title="${2:-Finder Quick Actions}"
+  local title="${2:-Finder Forge}"
   /usr/bin/osascript - "${title}" "${message}" <<'APPLESCRIPT' >/dev/null
 on run argv
   display alert (item 1 of argv) message (item 2 of argv) as critical

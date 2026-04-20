@@ -5,7 +5,7 @@
   <key>CFBundleDevelopmentRegion</key>
   <string>en_US</string>
   <key>CFBundleIdentifier</key>
-  <string>com.linkary.finderquickactions.openinqoder</string>
+  <string>com.linkary.finderforge.openinqoder</string>
   <key>CFBundleName</key>
   <string>Open in Qoder</string>
   <key>CFBundleShortVersionString</key>

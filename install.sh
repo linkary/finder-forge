@@ -3,7 +3,7 @@
 set -euo pipefail
 
 script_dir="${0:A:h}"
-install_root="${HOME}/Library/Application Support/FinderQuickActions"
+install_root="${HOME}/Library/Application Support/FinderForge"
 helpers_dir="${install_root}/helpers"
 services_dir="${HOME}/Library/Services"
 workflows_source_dir="${script_dir}/workflows"
@@ -36,7 +36,7 @@ done
 /System/Library/CoreServices/pbs -update >/dev/null 2>&1 || true
 
 cat <<EOF
-Installed Finder Quick Actions to:
+Installed Finder Forge Quick Actions to:
   ${services_dir}
 
 Shared helpers were installed to:

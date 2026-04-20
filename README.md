@@ -1,13 +1,13 @@
-# Finder Quick Actions
+# Finder Forge
 
-This repo installs four Finder Quick Actions / Services on macOS:
+Finder Forge installs four Finder Quick Actions / Services on macOS:
 
 - `New Text File Here`
 - `Open in Qoder`
 - `Open in Cursor`
 - `Open in Code`
 
-They are implemented as Automator `.workflow` bundles and shared shell helpers. The installer copies the workflows to `~/Library/Services` and the helpers to `~/Library/Application Support/FinderQuickActions/helpers`.
+They are implemented as Automator `.workflow` bundles and shared shell helpers. The installer copies the workflows to `~/Library/Services` and the helpers to `~/Library/Application Support/FinderForge/helpers`.
 
 ## Behavior
 
@@ -29,14 +29,14 @@ Run:
 
 The installer:
 
-- copies the helpers into `~/Library/Application Support/FinderQuickActions/helpers`
+- copies the helpers into `~/Library/Application Support/FinderForge/helpers`
 - copies each workflow into `~/Library/Services`
 - rewrites the workflow command paths to point at the installed helpers
 - asks macOS to rescan Services
 
 ## Configuration
 
-Editor app paths live near the top of [helpers/open_in_editor.sh](/Users/linkary/Codes/Labs/right-click/helpers/open_in_editor.sh).
+Editor app paths live near the top of [helpers/open_in_editor.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/open_in_editor.sh).
 
 Current defaults:
 
@@ -48,10 +48,10 @@ If any editor moves, update those paths and rerun `./install.sh`.
 
 ## Layout
 
-- [helpers/finder_context.sh](/Users/linkary/Codes/Labs/right-click/helpers/finder_context.sh): shared Finder context resolution and Finder UI helpers
-- [helpers/create_text_file.sh](/Users/linkary/Codes/Labs/right-click/helpers/create_text_file.sh): file creation action
-- [helpers/open_in_editor.sh](/Users/linkary/Codes/Labs/right-click/helpers/open_in_editor.sh): generic editor launcher
-- [workflows](/Users/linkary/Codes/Labs/right-click/workflows): exported Automator workflow bundles
+- [helpers/finder_context.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/finder_context.sh): shared Finder context resolution and Finder UI helpers
+- [helpers/create_text_file.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/create_text_file.sh): file creation action
+- [helpers/open_in_editor.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/open_in_editor.sh): generic editor launcher
+- [workflows](/Users/linkary/Codes/Labs/Finder-Forge/workflows): exported Automator workflow bundles
 
 ## Validation
 
