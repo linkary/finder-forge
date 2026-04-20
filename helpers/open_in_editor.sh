@@ -4,19 +4,7 @@ set -euo pipefail
 
 script_dir="${0:A:h}"
 source "${script_dir}/finder_context.sh"
-
-# Update these paths if any editor is moved or renamed.
-typeset -A EDITOR_PATHS=(
-  qoder "/Applications/Qoder.app"
-  cursor "/Applications/Cursor.app"
-  code "/Applications/Visual Studio Code.app"
-)
-
-typeset -A EDITOR_NAMES=(
-  qoder "Qoder"
-  cursor "Cursor"
-  code "Visual Studio Code"
-)
+source "${script_dir}/editor_config.sh"
 
 app_key=""
 

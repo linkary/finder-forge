@@ -1,6 +1,6 @@
 # Finder Forge
 
-Finder Forge installs four Finder Quick Actions / Services on macOS:
+Finder Forge installs Finder Quick Actions / Services on macOS:
 
 - `New Text File Here`
 - `Open in Qoder`
@@ -30,13 +30,20 @@ Run:
 The installer:
 
 - copies the helpers into `~/Library/Application Support/FinderForge/helpers`
-- copies each workflow into `~/Library/Services`
+- installs `New Text File Here` every time
+- installs editor workflows only when the target app exists on this Mac
 - rewrites the workflow command paths to point at the installed helpers
 - asks macOS to rescan Services
 
+To remove everything installed by Finder Forge:
+
+```sh
+./install.sh uninstall
+```
+
 ## Configuration
 
-Editor app paths live near the top of [helpers/open_in_editor.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/open_in_editor.sh).
+Editor app paths live in [helpers/editor_config.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/editor_config.sh).
 
 Current defaults:
 
@@ -44,11 +51,12 @@ Current defaults:
 - `Cursor`: `/Applications/Cursor.app`
 - `Visual Studio Code`: `/Applications/Visual Studio Code.app`
 
-If any editor moves, update those paths and rerun `./install.sh`.
+If any editor moves, update those paths in [helpers/editor_config.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/editor_config.sh) and rerun `./install.sh`.
 
 ## Layout
 
 - [helpers/finder_context.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/finder_context.sh): shared Finder context resolution and Finder UI helpers
+- [helpers/editor_config.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/editor_config.sh): shared editor app names and paths for install and launch
 - [helpers/create_text_file.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/create_text_file.sh): file creation action
 - [helpers/open_in_editor.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/open_in_editor.sh): generic editor launcher
 - [workflows](/Users/linkary/Codes/Labs/Finder-Forge/workflows): exported Automator workflow bundles
@@ -59,5 +67,6 @@ Useful commands:
 
 ```sh
 ./install.sh
+./install.sh uninstall
 /System/Library/CoreServices/pbs -read_bundle "$HOME/Library/Services/Open in Cursor.workflow"
 ```
