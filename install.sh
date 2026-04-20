@@ -43,8 +43,7 @@ install_workflow() {
   local source_workflow="${workflows_source_dir}/${workflow_name}"
   local destination_workflow="${services_dir}/${workflow_name}"
 
-  mkdir -p "${destination_workflow}/Contents/Resources"
-  cp "${source_workflow}/Contents/Info.plist" "${destination_workflow}/Contents/Info.plist"
+  cp -R "${source_workflow}" "${destination_workflow}"
   sed "s/__INSTALL_DIR__/${escaped_install_root}/g" \
     "${source_workflow}/Contents/Resources/document.wflow" \
     > "${destination_workflow}/Contents/Resources/document.wflow"
