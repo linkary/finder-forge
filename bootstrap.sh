@@ -106,8 +106,8 @@ download_bundle_root() {
   temp_root="$(mktemp -d "${TMPDIR:-/tmp}/finder-forge.XXXXXX")"
   archive_path="${temp_root}/finder-forge.zip"
 
-  echo "Downloading ${project_name} from:"
-  echo "  ${archive_url}"
+  echo "Downloading ${project_name} from:" >&2
+  echo "  ${archive_url}" >&2
 
   curl -fsSL "${archive_url}" -o "${archive_path}"
   unzip -q "${archive_path}" -d "${temp_root}"
