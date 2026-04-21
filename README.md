@@ -11,6 +11,8 @@ Finder Forge 用于在 macOS 上安装 Finder 快捷操作 / 服务：
 
 这些能力由 Automator `.workflow` 包和共享 shell 脚本实现。安装时会把工作流复制到 `~/Library/Services`，并把辅助脚本复制到 `~/Library/Application Support/FinderForge/helpers`。
 
+![](https://img.alicdn.com/imgextra/i2/O1CN01o3mRJN1CCexUl2EOz_!!6000000000045-2-tps-1136-1272.png)
+
 ## 功能说明
 
 - `New Text File Here` 会在当前 Finder 文件夹里创建 `untitled.txt`。

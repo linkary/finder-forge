@@ -11,6 +11,8 @@ Finder Forge installs Finder Quick Actions / Services on macOS:
 
 They are implemented as Automator `.workflow` bundles and shared shell helpers. The installer copies the workflows to `~/Library/Services` and the helpers to `~/Library/Application Support/FinderForge/helpers`.
 
+![](https://img.alicdn.com/imgextra/i2/O1CN01o3mRJN1CCexUl2EOz_!!6000000000045-2-tps-1136-1272.png)
+
 ## Behavior
 
 - `New Text File Here` creates `untitled.txt` in the current Finder folder.
