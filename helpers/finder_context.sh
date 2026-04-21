@@ -94,14 +94,40 @@ on run argv
     select targetFile
   end tell
 
-  delay 0.15
-
   try
     tell application "System Events"
-      if UI elements enabled then
-        key code 36
+      if not UI elements enabled then
+        return
       end if
+
+      tell process "Finder"
+        set frontmost to true
+      end tell
+
+      repeat 8 times
+        delay 0.15
+
+        tell process "Finder"
+          set frontmost to true
+          key code 36
+        end tell
+
+        delay 0.1
+
+        tell process "Finder"
+          try
+            set focusedElement to value of attribute "AXFocusedUIElement"
+            if role description of focusedElement is "text field" then
+              exit repeat
+            end if
+          end try
+        end tell
+      end repeat
     end tell
+  on error
+    -- Best effort only: file creation and selection should still succeed even if
+    -- Finder inline rename cannot be entered from a Service invocation.
+    return
   end try
 end run
 APPLESCRIPT
