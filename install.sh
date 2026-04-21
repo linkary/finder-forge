@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 set -euo pipefail
+: "${HOME:?HOME must be set}"
 
 script_dir="${0:A:h}"
 install_root="${HOME}/Library/Application Support/FinderForge"

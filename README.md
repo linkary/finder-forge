@@ -20,7 +20,20 @@ They are implemented as Automator `.workflow` bundles and shared shell helpers. 
 
 ## Install
 
-Run:
+For a shareable one-line installer with an Install / Uninstall prompt:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap-install.sh | zsh
+```
+
+For non-interactive runs:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap-install.sh | zsh -s -- install
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap-install.sh | zsh -s -- uninstall
+```
+
+If you are running from a local checkout, you can still use:
 
 ```sh
 ./install.sh
@@ -40,6 +53,8 @@ To remove everything installed by Finder Forge:
 ```sh
 ./install.sh uninstall
 ```
+
+The bootstrap installer above can also remove everything with the `uninstall` action.
 
 ## Configuration
 
