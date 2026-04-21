@@ -18,6 +18,7 @@ They are implemented as Automator `.workflow` bundles and shared shell helpers. 
 - If exactly one folder is selected, the new file is created inside that folder.
 - `New Text File Here` is shown for folder context, not file context.
 - After creation, the new file is revealed and selected in Finder; when Accessibility permission is available, Finder also attempts to start inline rename immediately.
+- Finder Forge sends the rename trigger only once and then waits for Finder to enter inline rename, instead of repeatedly toggling the same action.
 - Editor actions open the selected file or folder in the requested editor.
 - If nothing is selected, editor actions open the current Finder folder or the Desktop.
 

@@ -9,6 +9,8 @@ tmp_base="${tmp_base%/}"
 tmp_root="$(mktemp -d "${tmp_base}/finder-forge-create.XXXXXX")"
 trap 'rm -rf "${tmp_root}"' EXIT
 
+export FINDER_FORGE_DISABLE_INLINE_RENAME=1
+
 mkdir -p "${tmp_root}/subdir"
 
 echo "Test: creates untitled.txt in target folder"

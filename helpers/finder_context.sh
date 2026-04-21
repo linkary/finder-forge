@@ -12,6 +12,27 @@ end run
 APPLESCRIPT
 }
 
+finder_ui_scripting_status() {
+  if [[ -n "${FINDER_FORGE_UI_SCRIPTING_RESULT:-}" ]]; then
+    printf '%s\n' "${FINDER_FORGE_UI_SCRIPTING_RESULT}"
+    return
+  fi
+
+  /usr/bin/osascript <<'APPLESCRIPT'
+tell application "System Events"
+  try
+    return UI elements enabled
+  on error errMsg
+    return "ERROR: " & errMsg
+  end try
+end tell
+APPLESCRIPT
+}
+
+finder_ui_scripting_available() {
+  [[ "$(finder_ui_scripting_status)" == "true" ]]
+}
+
 finder_current_directory() {
   /usr/bin/osascript <<'APPLESCRIPT'
 tell application "Finder"
@@ -82,17 +103,19 @@ end run
 APPLESCRIPT
 }
 
-reveal_and_begin_rename_in_finder() {
+begin_inline_rename_in_finder() {
+  if [[ "${FINDER_FORGE_DISABLE_INLINE_RENAME:-0}" == "1" ]]; then
+    return 1
+  fi
+
+  if ! finder_ui_scripting_available; then
+    return 1
+  fi
+
   local target_path="${1}"
   /usr/bin/osascript - "${target_path}" <<'APPLESCRIPT' >/dev/null
 on run argv
   set targetFile to POSIX file (item 1 of argv) as alias
-
-  tell application "Finder"
-    activate
-    reveal targetFile
-    select targetFile
-  end tell
 
   try
     tell application "System Events"
@@ -104,16 +127,14 @@ on run argv
         set frontmost to true
       end tell
 
-      repeat 8 times
-        delay 0.15
+      delay 0.15
+      tell process "Finder"
+        set frontmost to true
+        key code 36
+      end tell
 
-        tell process "Finder"
-          set frontmost to true
-          key code 36
-        end tell
-
-        delay 0.1
-
+      repeat 20 times
+        delay 0.05
         tell process "Finder"
           try
             set focusedElement to value of attribute "AXFocusedUIElement"
@@ -131,4 +152,11 @@ on run argv
   end try
 end run
 APPLESCRIPT
+}
+
+reveal_and_begin_rename_in_finder() {
+  local target_path="${1}"
+
+  reveal_in_finder "${target_path}"
+  begin_inline_rename_in_finder "${target_path}" || true
 }

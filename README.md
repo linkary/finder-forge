@@ -101,8 +101,9 @@ swift scripts/verify_localizations.swift
 ## 文件重命名体验
 
 - `New Text File Here` 创建文件后会先在 Finder 中高亮并选中该文件。
-- 如果 Finder Forge 拥有辅助功能权限，脚本会尝试让 Finder 直接进入文件名编辑状态。
-- 如果没有辅助功能权限，文件仍会正常创建并保持选中，只是不会自动进入重命名编辑态。
+- `New Text File Here` 会尝试让 Finder 自动进入文件名编辑状态。
+- 这个动作依赖 Finder/Services 的实际时序，因此属于 best-effort 行为。
+- 如果出现“短暂进入编辑态后又退出”的现象，通常是 Finder 在服务收尾阶段把编辑态打断；最新版本会避免重复发送触发键来减少这种来回切换。
 
 ## Finder 空白区域限制
 
