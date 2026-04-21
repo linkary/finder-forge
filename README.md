@@ -90,6 +90,8 @@ curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap
 
 ```sh
 ./scripts/test.sh
+./scripts/sweep_rename_delay.sh
+./scripts/sweep_rename_delay.sh --outer 0.2,0.3,0.4 --inner 0.05,0.1 --runs 2
 swift scripts/verify_localizations.swift
 ```
 
@@ -106,6 +108,8 @@ swift scripts/verify_localizations.swift
 - `New Text File Here` 会尝试让 Finder 自动进入文件名编辑状态。
 - 这个动作依赖 Finder/Services 的实际时序，因此属于 best-effort 行为。
 - 如果出现“短暂进入编辑态后又退出”的现象，通常是 Finder 在服务收尾阶段把编辑态打断；最新版本会避免重复发送触发键来减少这种来回切换。
+- 如果要优化进入编辑态的速度，请运行 `./scripts/sweep_rename_delay.sh`。它以已安装的 workflow 为基准，不直接调用仓库内 helper，因此更贴近真实用户路径。
+- 当前默认值已经根据真实 workflow sweep 收紧到更快的组合：`outer=0.2`、`inner=0.05`。
 
 ## Finder 空白区域限制
 
@@ -127,6 +131,7 @@ swift scripts/verify_localizations.swift
 
 ```sh
 ./scripts/test.sh
+./scripts/sweep_rename_delay.sh
 ./install.sh
 ./install.sh uninstall
 swift scripts/verify_localizations.swift

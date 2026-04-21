@@ -162,7 +162,7 @@ schedule_inline_rename_in_finder() {
   local target_path="${1}"
 
   (
-    /bin/sleep 0.8
+    /bin/sleep 0.2
     /usr/bin/osascript - "${target_path}" <<'APPLESCRIPT' >/dev/null
 on run argv
   set targetFile to POSIX file (item 1 of argv) as alias
@@ -173,7 +173,7 @@ on run argv
     select targetFile
   end tell
 
-  delay 0.2
+  delay 0.05
 
   try
     tell application "System Events"

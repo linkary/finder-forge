@@ -89,8 +89,13 @@ Localization validation command:
 
 ```sh
 ./scripts/test.sh
+./scripts/sweep_rename_delay.sh
+./scripts/sweep_rename_delay.sh --outer 0.2,0.3,0.4 --inner 0.05,0.1 --runs 2
 swift scripts/verify_localizations.swift
 ```
+
+If you want to tune inline rename speed, run `./scripts/sweep_rename_delay.sh`. It benchmarks the installed workflow path via `automator`, which is the authoritative path for real user behavior.
+The current default timing has already been tightened based on a real workflow sweep to `outer=0.2` and `inner=0.05`.
 
 ## Finder Background Limitation
 
@@ -112,6 +117,7 @@ Useful commands:
 
 ```sh
 ./scripts/test.sh
+./scripts/sweep_rename_delay.sh
 ./install.sh
 ./install.sh uninstall
 swift scripts/verify_localizations.swift
