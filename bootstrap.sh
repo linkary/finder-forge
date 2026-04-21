@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 
 set -euo pipefail
 : "${HOME:?HOME must be set}"
@@ -6,7 +6,6 @@ set -euo pipefail
 project_name="Finder Forge"
 install_root="${HOME}/Library/Application Support/FinderForge"
 services_dir="${HOME}/Library/Services"
-script_source="${(%):-%N}"
 managed_workflows=(
   "New Text File Here.workflow"
   "Open in Qoder.workflow"
@@ -76,7 +75,9 @@ resolve_local_bundle_root() {
   local script_dir=""
   local candidate_path=""
 
-  for candidate_path in "${script_source}" "${0}"; do
+  for candidate_path in "${BASH_SOURCE[0]:-}" "${0}"; do
+    [[ -n "${candidate_path}" ]] || continue
+
     if [[ "${candidate_path}" == /* && -f "${candidate_path}" ]]; then
       script_path="${candidate_path}"
       break
@@ -88,7 +89,9 @@ resolve_local_bundle_root() {
 
   [[ -n "${script_path}" ]] || return 1
 
-  script_dir="${script_path:A:h}"
+  script_dir="$(
+    cd "$(dirname "${script_path}")" >/dev/null 2>&1 && pwd -P
+  )"
 
   if [[ -f "${script_dir}/install.sh" && -d "${script_dir}/workflows" && -d "${script_dir}/helpers" ]]; then
     printf '%s\n' "${script_dir}"
@@ -138,9 +141,9 @@ run_bundle_installer() {
   fi
 
   if [[ "${action}" == "install" ]]; then
-    zsh "${bundle_root}/install.sh"
+    /bin/zsh "${bundle_root}/install.sh"
   else
-    zsh "${bundle_root}/install.sh" uninstall
+    /bin/zsh "${bundle_root}/install.sh" uninstall
   fi
 }
 
@@ -155,7 +158,7 @@ EOF
 
   while true; do
     printf 'Choose an option [1-2]: ' >/dev/tty
-    # When invoked via curl | zsh, stdin is the script body, so prompts must read from the terminal.
+    # When invoked via curl | bash, stdin is the script body, so prompts must read from the terminal.
     read -r choice </dev/tty || exit 1
 
     case "${choice}" in

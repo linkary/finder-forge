@@ -25,15 +25,17 @@ They are implemented as Automator `.workflow` bundles and shared shell helpers. 
 For a shareable one-line installer with an Install / Uninstall prompt:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap.sh | zsh
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap.sh | bash
 ```
 
 For non-interactive runs:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap.sh | zsh -s -- install
-curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap.sh | zsh -s -- uninstall
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap.sh | bash -s -- install
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap.sh | bash -s -- uninstall
 ```
+
+`bootstrap.sh` is directly runnable with `bash`; it invokes macOS's built-in `/bin/zsh` internally for the actual installer, so users do not need to install zsh separately.
 
 If you are running from a local checkout, you can still use:
 
