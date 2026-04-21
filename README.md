@@ -17,6 +17,7 @@ Finder Forge 用于在 macOS 上安装 Finder 快捷操作 / 服务：
 - 如果 `untitled.txt` 已存在，会继续创建 `untitled 2.txt`、`untitled 3.txt`，依次递增。
 - 如果只选中了一个文件夹，新文件会创建在这个文件夹里。
 - `New Text File Here` 只显示在文件夹场景，不显示在文件场景。
+- 新文件创建后会在 Finder 中高亮并选中；如果已授予辅助功能权限，Finder 会尽量直接进入文件名编辑状态。
 - 编辑器动作会用指定编辑器打开当前选中的文件或文件夹。
 - 如果没有选中任何内容，编辑器动作会打开当前 Finder 文件夹，或者回退到桌面。
 
@@ -50,6 +51,7 @@ curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap
 - 只在本机检测到对应编辑器时安装相关工作流
 - 复制完整的 workflow bundle，保留多语言菜单资源
 - 重写 workflow 中的脚本路径，使其指向已安装的辅助脚本
+- 重建 Finder Forge 管理的 helper 目录，并清理旧版本遗留的受管文件
 - 通知 macOS 重新扫描 Services
 
 如果要卸载 Finder Forge 安装的所有内容：
@@ -59,6 +61,8 @@ curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap
 ```
 
 上面的 `bootstrap.sh` 也支持通过 `uninstall` 动作完成卸载。
+
+重复执行 `install` 是受支持的升级路径。重新安装会刷新 workflow 与 helper，并移除 Finder Forge 管理范围内的旧文件残留。
 
 ## 配置
 
@@ -76,6 +80,29 @@ curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap
 
 - Finder Forge 自带英文、简体中文、繁体中文的服务菜单文案。
 - Finder 会根据当前 macOS 语言显示对应文案；不支持的语言会回退到英文。
+- 已通过 Apple Bundle 本地化解析验证 `zh-Hans`、`zh-Hant` 与英文回退行为。
+
+## 中文菜单验证
+
+自动验证命令：
+
+```sh
+./scripts/test.sh
+swift scripts/verify_localizations.swift
+```
+
+手动冒烟验证：
+
+1. 安装 Finder Forge。
+2. 将 macOS 语言切换为简体中文或繁体中文，或使用对应语言的系统环境。
+3. 打开 Finder，在文件夹上右键，或从“服务”菜单中查看 Finder Forge 条目。
+4. 确认 `New Text File Here`、`Open in Qoder`、`Open in Cursor`、`Open in Code` 显示为对应中文菜单。
+
+## 文件重命名体验
+
+- `New Text File Here` 创建文件后会先在 Finder 中高亮并选中该文件。
+- 如果 Finder Forge 拥有辅助功能权限，脚本会尝试让 Finder 直接进入文件名编辑状态。
+- 如果没有辅助功能权限，文件仍会正常创建并保持选中，只是不会自动进入重命名编辑态。
 
 ## Finder 空白区域限制
 
@@ -96,7 +123,9 @@ curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap
 常用命令：
 
 ```sh
+./scripts/test.sh
 ./install.sh
 ./install.sh uninstall
+swift scripts/verify_localizations.swift
 /System/Library/CoreServices/pbs -read_bundle "$HOME/Library/Services/Open in Cursor.workflow"
 ```

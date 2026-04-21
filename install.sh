@@ -6,15 +6,28 @@ set -euo pipefail
 script_dir="${0:A:h}"
 install_root="${HOME}/Library/Application Support/FinderForge"
 helpers_dir="${install_root}/helpers"
+install_state_file="${install_root}/install-state.txt"
 services_dir="${HOME}/Library/Services"
 workflows_source_dir="${script_dir}/workflows"
 source "${script_dir}/helpers/editor_config.sh"
+
+managed_asset_generation="2026-04-21-localization-rename-upgrade-safe"
 
 managed_workflows=(
   "New Text File Here.workflow"
   "Open in Qoder.workflow"
   "Open in Cursor.workflow"
   "Open in Code.workflow"
+)
+
+# Finder Forge has not shipped renamed workflow bundles yet, but keep the
+# cleanup contract explicit so future upgrades can remove prior names safely.
+legacy_managed_workflows=(
+)
+
+managed_workflow_cleanup_names=(
+  "${managed_workflows[@]}"
+  "${legacy_managed_workflows[@]}"
 )
 
 typeset -A workflow_keys=(
@@ -30,9 +43,34 @@ fi
 
 remove_managed_workflows() {
   local workflow_name
-  for workflow_name in "${managed_workflows[@]}"; do
+  for workflow_name in "${managed_workflow_cleanup_names[@]}"; do
     rm -rf "${services_dir}/${workflow_name}"
   done
+}
+
+write_install_state() {
+  local source_revision="archive"
+  local source_origin="archive"
+
+  if git -C "${script_dir}" rev-parse --short HEAD >/dev/null 2>&1; then
+    source_revision="$(git -C "${script_dir}" rev-parse --short HEAD)"
+  fi
+
+  if git -C "${script_dir}" config --get remote.origin.url >/dev/null 2>&1; then
+    source_origin="$(git -C "${script_dir}" config --get remote.origin.url)"
+  fi
+
+  cat > "${install_state_file}" <<EOF
+project=Finder Forge
+managed_asset_generation=${managed_asset_generation}
+installed_at_utc=$(/bin/date -u +"%Y-%m-%dT%H:%M:%SZ")
+source_revision=${source_revision}
+source_origin=${source_origin}
+helpers_dir=${helpers_dir}
+services_dir=${services_dir}
+installed_workflows=${(j:,:)installed_workflows}
+skipped_workflows=${(j:,:)skipped_workflows}
+EOF
 }
 
 refresh_services() {
@@ -83,7 +121,8 @@ if (( $# == 1 )); then
   esac
 fi
 
-mkdir -p "${helpers_dir}" "${services_dir}"
+rm -rf "${helpers_dir}"
+mkdir -p "${install_root}" "${helpers_dir}" "${services_dir}"
 
 cp "${script_dir}/helpers/"*.sh "${helpers_dir}/"
 chmod 755 "${helpers_dir}/"*.sh
@@ -110,6 +149,7 @@ for workflow_name in "${(@k)workflow_keys}"; do
   fi
 done
 
+write_install_state
 refresh_services
 
 cat <<EOF
@@ -118,6 +158,9 @@ Installed Finder Forge Quick Actions to:
 
 Shared helpers were installed to:
   ${helpers_dir}
+
+Install state was written to:
+  ${install_state_file}
 
 Installed workflows:
 $(printf '  - %s\n' "${installed_workflows[@]}")

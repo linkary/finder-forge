@@ -17,6 +17,7 @@ They are implemented as Automator `.workflow` bundles and shared shell helpers. 
 - If `untitled.txt` already exists, it creates `untitled 2.txt`, `untitled 3.txt`, and so on.
 - If exactly one folder is selected, the new file is created inside that folder.
 - `New Text File Here` is shown for folder context, not file context.
+- After creation, the new file is revealed and selected in Finder; when Accessibility permission is available, Finder also attempts to start inline rename immediately.
 - Editor actions open the selected file or folder in the requested editor.
 - If nothing is selected, editor actions open the current Finder folder or the Desktop.
 
@@ -50,6 +51,7 @@ The installer:
 - installs editor workflows only when the target app exists on this Mac
 - copies the full workflow bundles so localized menu resources are preserved
 - rewrites the workflow command paths to point at the installed helpers
+- rebuilds the Finder Forge-managed helpers directory so old helper files do not linger across upgrades
 - asks macOS to rescan Services
 
 To remove everything installed by Finder Forge:
@@ -59,6 +61,8 @@ To remove everything installed by Finder Forge:
 ```
 
 The bootstrap installer above can also remove everything with the `uninstall` action.
+
+Re-running `install` is a supported upgrade path. It refreshes workflows and helpers while removing Finder Forge-managed leftovers from older installs.
 
 ## Configuration
 
@@ -76,6 +80,14 @@ If any editor moves, update those paths in [helpers/editor_config.sh](/Users/lin
 
 - Finder Forge ships localized service menu labels for English, Simplified Chinese, and Traditional Chinese.
 - Finder uses the current macOS language and falls back to English for unsupported languages.
+- Bundle-level localization resolution has been verified for `zh-Hans`, `zh-Hant`, and English fallback.
+
+Localization validation command:
+
+```sh
+./scripts/test.sh
+swift scripts/verify_localizations.swift
+```
 
 ## Finder Background Limitation
 
@@ -96,7 +108,9 @@ If any editor moves, update those paths in [helpers/editor_config.sh](/Users/lin
 Useful commands:
 
 ```sh
+./scripts/test.sh
 ./install.sh
 ./install.sh uninstall
+swift scripts/verify_localizations.swift
 /System/Library/CoreServices/pbs -read_bundle "$HOME/Library/Services/Open in Cursor.workflow"
 ```

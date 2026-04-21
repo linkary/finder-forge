@@ -81,3 +81,28 @@ on run argv
 end run
 APPLESCRIPT
 }
+
+reveal_and_begin_rename_in_finder() {
+  local target_path="${1}"
+  /usr/bin/osascript - "${target_path}" <<'APPLESCRIPT' >/dev/null
+on run argv
+  set targetFile to POSIX file (item 1 of argv) as alias
+
+  tell application "Finder"
+    activate
+    reveal targetFile
+    select targetFile
+  end tell
+
+  delay 0.15
+
+  try
+    tell application "System Events"
+      if UI elements enabled then
+        key code 36
+      end if
+    end tell
+  end try
+end run
+APPLESCRIPT
+}

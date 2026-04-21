@@ -14,4 +14,4 @@ fi
 
 target_file="$(next_available_text_file "${target_directory}")"
 /usr/bin/printf '' > "${target_file}"
-reveal_in_finder "${target_file}"
+reveal_and_begin_rename_in_finder "${target_file}"
