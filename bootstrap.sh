@@ -14,10 +14,9 @@ managed_workflows=(
   "Open in Code.workflow"
 )
 
-github_owner="${FINDER_FORGE_GITHUB_OWNER:-linkary}"
-github_repo="${FINDER_FORGE_GITHUB_REPO:-finder-forge}"
-github_ref="${FINDER_FORGE_GITHUB_REF:-main}"
-archive_url="${FINDER_FORGE_ARCHIVE_URL:-https://github.com/${github_owner}/${github_repo}/archive/refs/heads/${github_ref}.zip}"
+repo_base_url="${FINDER_FORGE_REPO_BASE_URL:-https://github.com/linkary/finder-forge}"
+repo_ref="${FINDER_FORGE_REF:-context-actions}"
+archive_url="${FINDER_FORGE_ARCHIVE_URL:-${repo_base_url}/archive/refs/heads/${repo_ref}.zip}"
 
 temp_root=""
 
@@ -31,7 +30,7 @@ trap cleanup EXIT
 
 usage() {
   cat <<EOF
-Usage: bootstrap-install.sh [install|uninstall]
+Usage: bootstrap.sh [install|uninstall]
 
 If no argument is provided, ${project_name} prompts for:
   1. Install
@@ -39,9 +38,8 @@ If no argument is provided, ${project_name} prompts for:
 
 Optional environment overrides:
   FINDER_FORGE_ARCHIVE_URL
-  FINDER_FORGE_GITHUB_OWNER
-  FINDER_FORGE_GITHUB_REPO
-  FINDER_FORGE_GITHUB_REF
+  FINDER_FORGE_REPO_BASE_URL
+  FINDER_FORGE_REF
 EOF
 }
 

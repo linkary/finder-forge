@@ -1,95 +1,97 @@
 # Finder Forge
 
-Finder Forge installs Finder Quick Actions / Services on macOS:
+[English README](./README.en.md)
+
+Finder Forge 用于在 macOS 上安装 Finder 快捷操作 / 服务：
 
 - `New Text File Here`
 - `Open in Qoder`
 - `Open in Cursor`
 - `Open in Code`
 
-They are implemented as Automator `.workflow` bundles and shared shell helpers. The installer copies the workflows to `~/Library/Services` and the helpers to `~/Library/Application Support/FinderForge/helpers`.
+这些能力由 Automator `.workflow` 包和共享 shell 脚本实现。安装时会把工作流复制到 `~/Library/Services`，并把辅助脚本复制到 `~/Library/Application Support/FinderForge/helpers`。
 
-## Behavior
+## 功能说明
 
-- `New Text File Here` creates `untitled.txt` in the current Finder folder.
-- If `untitled.txt` already exists, it creates `untitled 2.txt`, `untitled 3.txt`, and so on.
-- If exactly one folder is selected, the new file is created inside that folder.
-- `New Text File Here` is shown for folder context, not file context.
-- Editor actions open the selected file or folder in the requested editor.
-- If nothing is selected, editor actions open the current Finder folder or the Desktop.
+- `New Text File Here` 会在当前 Finder 文件夹里创建 `untitled.txt`。
+- 如果 `untitled.txt` 已存在，会继续创建 `untitled 2.txt`、`untitled 3.txt`，依次递增。
+- 如果只选中了一个文件夹，新文件会创建在这个文件夹里。
+- `New Text File Here` 只显示在文件夹场景，不显示在文件场景。
+- 编辑器动作会用指定编辑器打开当前选中的文件或文件夹。
+- 如果没有选中任何内容，编辑器动作会打开当前 Finder 文件夹，或者回退到桌面。
 
-## Install
+## 安装
 
-For a shareable one-line installer with an Install / Uninstall prompt:
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap-install.sh | zsh
-```
-
-For non-interactive runs:
+如果希望通过一行命令安装，并弹出 `Install / Uninstall` 选择：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap-install.sh | zsh -s -- install
-curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap-install.sh | zsh -s -- uninstall
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/context-actions/bootstrap.sh | zsh
 ```
 
-If you are running from a local checkout, you can still use:
+如果需要无交互执行：
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/context-actions/bootstrap.sh | zsh -s -- install
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/context-actions/bootstrap.sh | zsh -s -- uninstall
+```
+
+如果是在本地仓库中执行，也可以直接运行：
 
 ```sh
 ./install.sh
 ```
 
-The installer:
+安装器会：
 
-- copies the helpers into `~/Library/Application Support/FinderForge/helpers`
-- installs `New Text File Here` every time
-- installs editor workflows only when the target app exists on this Mac
-- copies the full workflow bundles so localized menu resources are preserved
-- rewrites the workflow command paths to point at the installed helpers
-- asks macOS to rescan Services
+- 把辅助脚本复制到 `~/Library/Application Support/FinderForge/helpers`
+- 始终安装 `New Text File Here`
+- 只在本机检测到对应编辑器时安装相关工作流
+- 复制完整的 workflow bundle，保留多语言菜单资源
+- 重写 workflow 中的脚本路径，使其指向已安装的辅助脚本
+- 通知 macOS 重新扫描 Services
 
-To remove everything installed by Finder Forge:
+如果要卸载 Finder Forge 安装的所有内容：
 
 ```sh
 ./install.sh uninstall
 ```
 
-The bootstrap installer above can also remove everything with the `uninstall` action.
+上面的 `bootstrap.sh` 也支持通过 `uninstall` 动作完成卸载。
 
-## Configuration
+## 配置
 
-Editor app paths live in [helpers/editor_config.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/editor_config.sh).
+编辑器路径定义在 [helpers/editor_config.sh](/Users/linkary/Codes/Labs/finder-forge/helpers/editor_config.sh)。
 
-Current defaults:
+当前默认值：
 
 - `Qoder`: `/Applications/Qoder.app`
 - `Cursor`: `/Applications/Cursor.app`
 - `Visual Studio Code`: `/Applications/Visual Studio Code.app`
 
-If any editor moves, update those paths in [helpers/editor_config.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/editor_config.sh) and rerun `./install.sh`.
+如果某个编辑器被移动了位置，请更新 [helpers/editor_config.sh](/Users/linkary/Codes/Labs/finder-forge/helpers/editor_config.sh) 后重新运行 `./install.sh`。
 
-## Localization
+## 本地化
 
-- Finder Forge ships localized service menu labels for English, Simplified Chinese, and Traditional Chinese.
-- Finder uses the current macOS language and falls back to English for unsupported languages.
+- Finder Forge 自带英文、简体中文、繁体中文的服务菜单文案。
+- Finder 会根据当前 macOS 语言显示对应文案；不支持的语言会回退到英文。
 
-## Finder Background Limitation
+## Finder 空白区域限制
 
-- Generic Finder Services / Quick Actions do not reliably provide a top-level right-click item for empty space in a Finder window.
-- This project uses Services, so `New Text File Here` can appear for folders but not as a true empty-space background menu item.
-- If you need empty-space background actions, the practical path is a Finder Sync extension or a third-party tool that wraps Finder extension behavior.
+- 通用 Finder Services / Quick Actions 无法稳定地在 Finder 窗口空白区域提供顶层右键菜单项。
+- 这个项目基于 Services，所以 `New Text File Here` 可以在文件夹场景出现，但不能保证作为真正的“空白处右键菜单”出现。
+- 如果必须支持空白区域右键动作，实际可行的方向是 Finder Sync Extension 或第三方 Finder 扩展方案。
 
-## Layout
+## 项目结构
 
-- [helpers/finder_context.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/finder_context.sh): shared Finder context resolution and Finder UI helpers
-- [helpers/editor_config.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/editor_config.sh): shared editor app names and paths for install and launch
-- [helpers/create_text_file.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/create_text_file.sh): file creation action
-- [helpers/open_in_editor.sh](/Users/linkary/Codes/Labs/Finder-Forge/helpers/open_in_editor.sh): generic editor launcher
-- [workflows](/Users/linkary/Codes/Labs/Finder-Forge/workflows): exported Automator workflow bundles
+- [helpers/finder_context.sh](/Users/linkary/Codes/Labs/finder-forge/helpers/finder_context.sh): 共享的 Finder 上下文解析和 Finder UI 辅助逻辑
+- [helpers/editor_config.sh](/Users/linkary/Codes/Labs/finder-forge/helpers/editor_config.sh): 安装与启动共用的编辑器名称和路径配置
+- [helpers/create_text_file.sh](/Users/linkary/Codes/Labs/finder-forge/helpers/create_text_file.sh): 新建文本文件动作
+- [helpers/open_in_editor.sh](/Users/linkary/Codes/Labs/finder-forge/helpers/open_in_editor.sh): 通用编辑器启动器
+- [workflows](/Users/linkary/Codes/Labs/finder-forge/workflows): 导出的 Automator workflow bundles
 
-## Validation
+## 验证
 
-Useful commands:
+常用命令：
 
 ```sh
 ./install.sh
