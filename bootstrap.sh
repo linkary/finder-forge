@@ -15,7 +15,7 @@ managed_workflows=(
 )
 
 repo_base_url="${FINDER_FORGE_REPO_BASE_URL:-https://github.com/linkary/finder-forge}"
-repo_ref="${FINDER_FORGE_REF:-context-actions}"
+repo_ref="${FINDER_FORGE_REF:-main}"
 archive_url="${FINDER_FORGE_ARCHIVE_URL:-${repo_base_url}/archive/refs/heads/${repo_ref}.zip}"
 
 temp_root=""

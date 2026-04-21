@@ -25,14 +25,14 @@ Finder Forge 用于在 macOS 上安装 Finder 快捷操作 / 服务：
 如果希望通过一行命令安装，并弹出 `Install / Uninstall` 选择：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/context-actions/bootstrap.sh | zsh
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap.sh | zsh
 ```
 
 如果需要无交互执行：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/context-actions/bootstrap.sh | zsh -s -- install
-curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/context-actions/bootstrap.sh | zsh -s -- uninstall
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap.sh | zsh -s -- install
+curl -fsSL https://raw.githubusercontent.com/linkary/finder-forge/main/bootstrap.sh | zsh -s -- uninstall
 ```
 
 如果是在本地仓库中执行，也可以直接运行：
